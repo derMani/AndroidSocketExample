@@ -7,6 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -101,6 +103,12 @@ public class MySocketStarter extends Activity {
                     String read = input.readLine();
 
                     updateConversationHandler.post(new updateUIThread(read));
+                    if (read.equals("www.test.de")){
+                        Intent i = new Intent(Intent.ACTION_VIEW);
+                        i.setData(Uri.parse("http://www.test.de"));
+                        startActivity(i);
+                    }
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
