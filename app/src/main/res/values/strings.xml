@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AndroidSocketExample</string>
+    <string name="app_name">Anedo Service Component</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_anedo_service_component">Anedo Service Component</string>
 
 </resources>
