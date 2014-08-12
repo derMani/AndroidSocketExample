@@ -18,6 +18,9 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import de.hsos.sawida.asc.IRemoteService;
+
+
 public class AnedoServiceComponent extends Service {
     Context context;
     private MySocketStarter mySocketStarter;
@@ -25,9 +28,16 @@ public class AnedoServiceComponent extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+        Log.d(getClass().getSimpleName(), "onBind()");
+        return myRemoteServiceStub;
+
     }
+    private IRemoteService.Stub myRemoteServiceStub = new IRemoteService.Stub() {
+        public String getOsnabrueck() throws RemoteException {
+            return "Osnabruck";
+        }
+    };
+
 
     public void onCreate() {
         super.onCreate();
@@ -57,6 +67,9 @@ public class AnedoServiceComponent extends Service {
         Log.d(getClass().getSimpleName(), "onStart()");
         return super.onStartCommand(intent, flags, startId);
     }
+
+
+
 
 
     public class MySocketStarter implements Runnable {

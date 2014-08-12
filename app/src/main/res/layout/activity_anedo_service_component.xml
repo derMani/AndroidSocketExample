@@ -50,9 +50,24 @@
         android:text="Nothing yet"
         android:id="@+id/textView_log"
         android:layout_toEndOf="@+id/button_startService"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/button_startService"
+        android:layout_below="@+id/buttonBindService"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_marginTop="39dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invoke Service"
+        android:id="@+id/buttonInvokeService"
+        android:layout_below="@+id/buttonbuttton_stop_service"
+        android:layout_alignStart="@+id/buttonbuttton_stop_service"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BindService"
+        android:id="@+id/buttonBindService"
+        android:layout_below="@+id/button_startService"
+        android:layout_alignParentStart="true"/>
 
 </RelativeLayout>

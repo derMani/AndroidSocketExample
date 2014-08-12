@@ -26,6 +26,8 @@
             android:name="de.hsos.sawida.asc.AnedoServiceComponent"
             android:enabled="true">
         </service>
+
+
     </application>
 
 </manifest>
