@@ -8,6 +8,8 @@ interface IRemoteService {
 
     String getOsnabrueck();
 
+    Location getLocation();
+
 
 
 }

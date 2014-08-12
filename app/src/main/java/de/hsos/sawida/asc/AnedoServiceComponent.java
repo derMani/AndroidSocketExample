@@ -3,7 +3,12 @@ package de.hsos.sawida.asc;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -11,6 +16,7 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,10 +27,14 @@ import java.net.Socket;
 import de.hsos.sawida.asc.IRemoteService;
 
 
-public class AnedoServiceComponent extends Service {
+public class AnedoServiceComponent extends Service implements LocationListener{
     Context context;
     private MySocketStarter mySocketStarter;
     private boolean socketOpen;
+    private String provider;
+    private LocationManager locationManager;
+    private LocationListener listener = this;
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -33,8 +43,14 @@ public class AnedoServiceComponent extends Service {
 
     }
     private IRemoteService.Stub myRemoteServiceStub = new IRemoteService.Stub() {
+
         public String getOsnabrueck() throws RemoteException {
             return "Osnabruck";
+        }
+
+        @Override
+        public Location getLocation() throws RemoteException {
+            return locationManager.getLastKnownLocation(provider);
         }
     };
 
@@ -64,12 +80,49 @@ public class AnedoServiceComponent extends Service {
         mySocketStarter = new MySocketStarter();
         new Thread(mySocketStarter).start();
 
+        getGEOLocation();
+
         Log.d(getClass().getSimpleName(), "onStart()");
         return super.onStartCommand(intent, flags, startId);
     }
 
+    public void getGEOLocation() {
 
+        // Get the location manager
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        // Define the criteria how to select the locatioin provider -> use
+        // default
+        Criteria criteria = new Criteria();
+        provider = LocationManager.NETWORK_PROVIDER;
+        locationManager.requestLocationUpdates(provider,0,0,this);
+        Location location = locationManager.getLastKnownLocation(provider);
+            System.out.println("Provider " + provider + " has been selected.");
+            onLocationChanged(location);
+    }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        int lat = (int) (location.getLatitude());
+        int lng = (int) (location.getLongitude());
+        Log.d("INFO","Lat " + lat + " , Long "+ lng );
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+        Toast.makeText(this, "Enabled new provider " + provider,
+                Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
+    }
 
 
     public class MySocketStarter implements Runnable {

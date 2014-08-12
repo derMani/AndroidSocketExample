@@ -3,6 +3,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.location.Location;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v4.content.LocalBroadcastManager;
@@ -35,6 +36,7 @@ public class AnedoServiceActivity extends Activity {
     };
 
     private TextView text;
+    private TextView textLocation;
     private boolean started;
     private Handler updateUIMessageHandler;
     private RemoteServiceConnection conn = null;
@@ -53,6 +55,15 @@ public class AnedoServiceActivity extends Activity {
         Button bind = (Button)findViewById(R.id.buttonBindService);
 
         Button invoke = (Button)findViewById(R.id.buttonInvokeService);
+
+
+        Button getLocation = (Button)findViewById(R.id.button_get_location);
+
+        getLocation.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v){
+                invokeGEOService();
+            }
+        });
 
         invoke.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
@@ -79,7 +90,11 @@ public class AnedoServiceActivity extends Activity {
         });
 
         text =  (TextView)findViewById( R.id.textView_log);
+        textLocation =  (TextView)findViewById( R.id.textView_location);
+
     }
+
+
 
     @Override
     protected void onResume() {
@@ -120,9 +135,6 @@ public class AnedoServiceActivity extends Activity {
         if (started) {
             Toast.makeText(AnedoServiceActivity.this, "Service already started", Toast.LENGTH_SHORT).show();
         } else {
-
-
-
             Intent i = new Intent();
             String nameOfClass = "AnedoServiceComponent";
             try {
@@ -223,7 +235,23 @@ public class AnedoServiceActivity extends Activity {
             }
         }
     }
+    private void invokeGEOService() {
+        if(conn == null) {
+            Toast.makeText(this, "Cannot invoke - service not bound", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Getting Location", Toast.LENGTH_SHORT).show();
+            try {
+                Location location = remoteService.getLocation();
+                String position = "Lat: " + location.getLatitude() + " / Long: " + location.getLongitude();
+                textLocation.setText(position);
 
+
+
+            } catch (RemoteException re) {
+                Log.e( getClass().getSimpleName(), "RemoteException" );
+            }
+        }
+    }
 
     class RemoteServiceConnection implements ServiceConnection {
         public void onServiceConnected(ComponentName className,

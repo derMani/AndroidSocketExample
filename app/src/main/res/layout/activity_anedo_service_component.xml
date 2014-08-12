@@ -70,4 +70,21 @@
         android:layout_below="@+id/button_startService"
         android:layout_alignParentStart="true"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Geolocation"
+        android:id="@+id/button_get_location"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView_location"
+        android:layout_below="@+id/button_get_location"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="60dp"
+        android:layout_alignEnd="@+id/buttonInvokeService"/>
+
 </RelativeLayout>
